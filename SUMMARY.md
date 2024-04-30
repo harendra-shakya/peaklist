@@ -7,7 +7,7 @@
   - [Some child page](\docs\How_it_works.md)
 
 - [Second page’s title](/README.md)
-  - [Some child page](\docs\How it works.md)
+  - [Some child page](\docs\How_it_works.md)
 
 ## A second-page group​
 
