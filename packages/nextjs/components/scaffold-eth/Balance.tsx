@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Address } from "viem";
-import { useBalance } from "wagmi";
+import { Address, formatEther } from "viem";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 import { useGlobalState } from "~~/services/store/store";
 
 type BalanceProps = {
@@ -17,15 +17,13 @@ type BalanceProps = {
  */
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-
   const price = useGlobalState(state => state.nativeCurrencyPrice);
   const {
     data: balance,
     isError,
     isLoading,
-  } = useBalance({
+  } = useWatchBalance({
     address,
-    watch: true,
   });
 
   const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
@@ -55,7 +53,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     );
   }
 
-  const formattedBalance = balance ? Number(balance.formatted) : 0;
+  const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
   return (
     <button
