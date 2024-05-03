@@ -11,9 +11,13 @@ import "hardhat/console.sol";
 contract CrowdFunding {
 
 	error CrowdFunding__StartDate_ShouldBeInPresent();
+    error CrowdFunding__FundingWith_ZeroAmount();
+    error CrowdFunding__InvalidCampaign();
+    error CrowdFunding__CampaignAlreadyEnded();
 
 	// State Variables
-    uint256 private s_campaignsCount;
+    uint256 private s_campaignId;
+    mapping(uint256 campaignId => Campaign) private s_campaigns;
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
 
@@ -25,6 +29,7 @@ contract CrowdFunding {
         uint256 targetAmount;
         uint256 amountCollected;
         uint256 amountWithdrawnByOwner;
+		address[] funders;
     }
 
 
@@ -42,14 +47,43 @@ contract CrowdFunding {
 
         Campaign memory newCampaign = Campaign({
             creator: payable(msg.sender),
-            id: s_campaignsCount,
+            id: s_campaignId,
             name: _name,
             description: _description,
             targetAmount: _targetAmount,
             amountCollected: 0,
-            amountWithdrawnByOwner: 0
+            amountWithdrawnByOwner: 0,
+			funders: new address[](0)
         });
 
+    }
+
+	function fundCampaign(uint256 campaignId) external payable {
+        if (msg.value == 0) {
+            revert CrowdFunding__FundingWith_ZeroAmount();
+        }
+
+        if (s_campaigns[campaignId].creator == address(0)) {
+            revert CrowdFunding__InvalidCampaign();
+        }
+
+        uint8 newFunder = 1;
+
+        address[] memory funders = s_campaigns[campaignId].funders;
+
+        for (uint256 i = 0; i < funders.length;) {
+            if (funders[i] == msg.sender) {
+                newFunder = 2;
+                break;
+            }
+
+            unchecked {
+                ++i;
+            }
+        }
+
+      
+        s_campaigns[campaignId].amountCollected = s_campaigns[campaignId].amountCollected + msg.value;
     }
 
 
