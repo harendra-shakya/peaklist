@@ -1,4 +1,20 @@
-# 🏗 Scaffold-ETH 2
+- a clear short one-sentence description of your dapp. Aim for something simple like: “Easy social recovery via Telegram” or “Customizable long-term vaults on smart contract accounts to prevent thefts from hacking”.
+
+- short description of team and backgrounds.
+
+- a clear installation/execution process that works.
+
+Bonus points for:
+
+- Producing a tutorial we can use via a well written README.md
+
+- Additional ~2-5 minute video talking about the code. Geek out and show us your skills.
+
+- Great UX/UI
+
+- Slide presentation in README.md
+
+# Peaklist
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
@@ -67,15 +83,3 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 - Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
 - Edit your deployment scripts in `packages/hardhat/deploy`
 - Edit your smart contract test in: `packages/hardhat/test`. To run test use `yarn hardhat:test`
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
