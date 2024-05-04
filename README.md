@@ -1,3 +1,5 @@
+[![Lint](https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml/badge.svg)](https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml)
+
 - a clear short one-sentence description of your dapp. Aim for something simple like: “Easy social recovery via Telegram” or “Customizable long-term vaults on smart contract accounts to prevent thefts from hacking”.
 
 - short description of team and backgrounds.
