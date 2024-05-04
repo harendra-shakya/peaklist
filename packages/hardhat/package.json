@@ -2,6 +2,7 @@
   "name": "@se-2/hardhat",
   "version": "0.0.1",
   "scripts": {
+    "generateTypes": "typechain --target ethers-v5 --out-dir typechain-types './abi/*.json'",
     "account": "hardhat run scripts/listAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
     "compile": "hardhat compile",
@@ -17,6 +18,9 @@
     "hardhat-verify": "hardhat verify"
   },
   "devDependencies": {
+    "@chainlink/contracts": "^0.6.1",
+    "@chainlink/contracts-ccip": "^1.2.1",
+    "@chainlink/env-enc": "^1.0.5",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.1",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.3",
@@ -35,8 +39,8 @@
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "ethers": "^6.10.0",
-    "hardhat": "^2.19.4",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.14.1",
     "hardhat-deploy": "^0.11.45",
     "hardhat-deploy-ethers": "^0.4.1",
     "hardhat-gas-reporter": "^1.0.9",
