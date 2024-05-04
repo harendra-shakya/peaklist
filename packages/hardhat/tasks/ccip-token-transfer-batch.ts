@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl, getRouterConfig, getPayFeesIn } from "./utils";
-import { Wallet, providers } from "ethers";
+import { Wallet, JsonRpcProvider } from "ethers";
 import { IRouterClient, IRouterClient__factory, IERC20, IERC20__factory } from "../typechain-types";
 import { TokenAmounts } from "./constants";
 import { Spinner } from "../utils/spinner";
@@ -29,7 +29,7 @@ task(
     const privateKey = getPrivateKey();
     const sourceRpcProviderUrl = getProviderRpcUrl(sourceBlockchain);
 
-    const provider = new providers.JsonRpcProvider(sourceRpcProviderUrl);
+    const provider = new JsonRpcProvider(sourceRpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const signer = wallet.connect(provider);
 

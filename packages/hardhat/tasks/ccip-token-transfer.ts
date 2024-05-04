@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
-import { Wallet, providers, utils, constants } from "ethers";
+import { Wallet, JsonRpcProvider, ZeroAddress, id, AbiCoder } from "ethers";
 import { IRouterClient, IRouterClient__factory, IERC20, IERC20__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 import { getCcipMessageId } from "./helpers";
@@ -27,7 +27,7 @@ task(`ccip-token-transfer`, `Transfers tokens from one blockchain to another usi
     const privateKey = getPrivateKey();
     const sourceRpcProviderUrl = getProviderRpcUrl(sourceBlockchain);
 
-    const provider = new providers.JsonRpcProvider(sourceRpcProviderUrl);
+    const provider = new JsonRpcProvider(sourceRpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const signer = wallet.connect(provider);
 
@@ -75,15 +75,15 @@ task(`ccip-token-transfer`, `Transfers tokens from one blockchain to another usi
 
     const gasLimitValue = taskArguments.gasLimit ? taskArguments.gasLimit : 200_000;
 
-    const functionSelector = utils.id("CCIP EVMExtraArgsV1").slice(0, 10);
-    const extraArgs = utils.defaultAbiCoder.encode(["uint256", "bool"], [gasLimitValue, false]); // for transfers to EOA gas limit is 0
+    const functionSelector = id("CCIP EVMExtraArgsV1").slice(0, 10);
+    const extraArgs = AbiCoder.defaultAbiCoder().encode(["uint256", "bool"], [gasLimitValue, false]); // for transfers to EOA gas limit is 0
     const encodedExtraArgs = `${functionSelector}${extraArgs.slice(2)}`;
 
     const message = {
-      receiver: utils.defaultAbiCoder.encode(["address"], [receiver]),
-      data: utils.defaultAbiCoder.encode(["string"], [""]), // no data
+      receiver: AbiCoder.defaultAbiCoder().encode(["address"], [receiver]),
+      data: AbiCoder.defaultAbiCoder().encode(["string"], [""]), // no data
       tokenAmounts: tokenAmounts,
-      feeToken: feeTokenAddress ? feeTokenAddress : constants.AddressZero,
+      feeToken: feeTokenAddress ? feeTokenAddress : ZeroAddress,
       extraArgs: encodedExtraArgs,
     };
 
@@ -127,7 +127,7 @@ task(`ccip-token-transfer`, `Transfers tokens from one blockchain to another usi
       spinner.stop();
       console.log(`✅ Sent successfully! Transaction hash: ${sendTx.hash}`);
 
-      await getCcipMessageId(sendTx, receipt, provider);
+      await getCcipMessageId(sendTx!, receipt, provider);
     } else {
       spinner.stop();
       console.log(`ℹ️  Estimated fees (wei): ${fees}`);
@@ -143,7 +143,7 @@ task(`ccip-token-transfer`, `Transfers tokens from one blockchain to another usi
       spinner.stop();
       console.log(`✅ Sent successfully! Transaction hash: ${sendTx.hash}`);
 
-      await getCcipMessageId(sendTx, receipt, provider);
+      await getCcipMessageId(sendTx!, receipt, provider);
     }
 
     console.log(`✅ Task ccip-token-transfer finished with the execution`);
