@@ -17,7 +17,7 @@ contract CrowdFunding {
 
 	// State Variables
     uint256 private s_campaignId;
-    mapping(uint256 campaignId => Campaign) private s_campaigns;
+    mapping(uint256 => Campaign) private s_campaigns;
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
 
