@@ -27,7 +27,10 @@ contract CrowdFunding {
     error CrowdFunding__CampaignAlreadyEnded();
     error CrowdFunding__InvalidEndDate();
 
-	// State Variables
+    //////////////////////////////////////////////////////////
+    /////////////.////  State Variables  /////////////////////
+    //////////////////////////////////////////////////////////
+
     address payable private treasuryAddress;
     uint256 private s_campaignId;
 
@@ -37,8 +40,13 @@ contract CrowdFunding {
     // creator => Campaign [] - Tracking All Campaign by creator to save gas and time
     mapping(address creator => Campaign[] campaigns) private s_campaignCreatedByCreator;
 
+    // campaignId => funder address => amount - Tracking Total Amount funded by certain user to a ceratin campaign
+    mapping(uint256 campaignId => mapping(address funders => uint256 amount)) s_fundedAmounts;
 
-	// Events
+    //////////////////////////////////////////////////////////
+    //////////////////////   Events  /////////////////////////
+    //////////////////////////////////////////////////////////
+
     event CampaignCreated(
         uint256 indexed campaignId,
         address indexed creator,
@@ -49,7 +57,10 @@ contract CrowdFunding {
     event CamapignFunded(uint256 indexed campaignId, address indexed funder, uint256 indexed amount);
     event WithdrawlSuccessful(uint256 indexed campaignId, address indexed owner, uint256 indexed amount);
 
-    // Type Declarations
+    //////////////////////////////////////////////////////////
+    ////////////////  Type Declarations  /////////////////////
+    //////////////////////////////////////////////////////////
+
     struct Campaign {
         address payable creator;
         uint256 id;
@@ -69,6 +80,10 @@ contract CrowdFunding {
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
 
 	// Modifiers: used to define a set of rules that must be met before or after a function is executed
+
+    //////////////////////////////////////////////////////////
+    //////////////////////  Functions  ///////////////////////
+    //////////////////////////////////////////////////////////
 
     function createCampaign(
         string memory _name,
@@ -107,13 +122,17 @@ contract CrowdFunding {
         return s_campaignId;
     }
 
-	function fundCampaign(uint256 campaignId) external payable {
+    function fundCampaign(uint256 campaignId) external payable {
         if (msg.value == 0) {
             revert CrowdFunding__FundingWith_ZeroAmount();
         }
 
         if (s_campaigns[campaignId].creator == address(0)) {
             revert CrowdFunding__InvalidCampaign();
+        }
+
+        if (s_campaigns[campaignId].claimedByOwner) {
+            revert CrowdFunding__CampaignAlreadyEnded();
         }
 
         uint8 newFunder = 1;
@@ -131,9 +150,17 @@ contract CrowdFunding {
             }
         }
 
-      
-        s_campaigns[campaignId].amountCollected = s_campaigns[campaignId].amountCollected + msg.value;
+        if (newFunder == 1) {
+            s_campaigns[campaignId].funders.push(msg.sender);
+        }
+
+        s_campaigns[campaignId].amountCollected += msg.value;
+
+        s_fundedAmounts[campaignId][msg.sender] += msg.value;
+
+        emit CamapignFunded(campaignId, msg.sender, msg.value);
     }
+
 
     //////////////////////////////////////////////////////////
     //////////////////  Getter Functions  ////////////////////
@@ -147,6 +174,28 @@ contract CrowdFunding {
         return s_campaigns[campaignId];
     }
 
+    function getCampaigns() external view returns (Campaign[] memory) {
+        Campaign[] memory allCampaigns = new Campaign[](s_campaignId);
+
+        for (uint256 i = 0; i < s_campaignId;) {
+            allCampaigns[i] = s_campaigns[i];
+
+            unchecked {
+                ++i;
+            }
+        }
+
+        return allCampaigns;
+    }
+
+    function getFunders(uint256 campaignId) external view returns (address[] memory) {
+        address[] memory funders = s_campaigns[campaignId].funders;
+        return funders;
+    }
+
+    function getCampaignsCreatedByUser() external view returns (Campaign[] memory) {
+        return s_campaignCreatedByCreator[msg.sender];
+    }
 
 	/**
 	 * Function that allows the contract to receive ETH
