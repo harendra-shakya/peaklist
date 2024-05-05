@@ -1,9 +1,9 @@
-import { ContractReceipt, ContractTransaction, providers } from "ethers";
+import { TransactionReceipt, ContractTransaction, JsonRpcProvider } from "ethers";
 
 export const getCcipMessageId = async (
   tx: ContractTransaction,
-  receipt: ContractReceipt,
-  provider: providers.JsonRpcProvider,
+  receipt: TransactionReceipt,
+  provider: JsonRpcProvider,
 ) => {
   // Simulate a call to the router to fetch the messageID
   const call = {
