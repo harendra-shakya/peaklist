@@ -135,8 +135,16 @@ contract CrowdFunding {
         s_campaigns[campaignId].amountCollected = s_campaigns[campaignId].amountCollected + msg.value;
     }
 
+    //////////////////////////////////////////////////////////
+    //////////////////  Getter Functions  ////////////////////
+    //////////////////////////////////////////////////////////
+
     function getCurrentCampaignId() external view returns (uint256) {
         return s_campaignId;
+    }
+
+    function getCampaign(uint256 campaignId) external view returns (Campaign memory) {
+        return s_campaigns[campaignId];
     }
 
 

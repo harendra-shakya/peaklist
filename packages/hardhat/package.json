@@ -15,6 +15,7 @@
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
     "format": "prettier --write ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
+    "ntest": "REPORT_GAS=false hardhat test --network hardhat",
     "verify": "hardhat etherscan-verify",
     "hardhat-verify": "hardhat verify",
     "clean": "rm -rf artifacts cache node_modules"
