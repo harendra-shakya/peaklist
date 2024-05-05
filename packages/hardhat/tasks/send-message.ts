@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { getPayFeesIn, getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
-import { Wallet, providers } from "ethers";
+import { Wallet, JsonRpcProvider } from "ethers";
 
 import { BasicMessageSender } from "../typechain-types/artifacts/contracts";
 import { BasicMessageSender__factory } from "../typechain-types/factories/artifacts/contracts";
@@ -20,7 +20,7 @@ task(`send-message`, `Sends basic text messages`)
     const privateKey = getPrivateKey();
     const sourceRpcProviderUrl = getProviderRpcUrl(sourceBlockchain);
 
-    const sourceProvider = new providers.JsonRpcProvider(sourceRpcProviderUrl);
+    const sourceProvider = new JsonRpcProvider(sourceRpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const signer = wallet.connect(sourceProvider);
 

@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
-import { Wallet, providers } from "ethers";
+import { Wallet, JsonRpcProvider } from "ethers";
 import { IRouterClient, IRouterClient__factory } from "../typechain-types";
 
 import { ProgrammableTokenTransfers } from "../typechain-types/artifacts/contracts";
@@ -23,7 +23,7 @@ task(`send-token-and-data`, `Sends token and data using ProgrammableTokenTransfe
     const privateKey = getPrivateKey();
     const sourceRpcProviderUrl = getProviderRpcUrl(sourceBlockchain);
 
-    const sourceProvider = new providers.JsonRpcProvider(sourceRpcProviderUrl);
+    const sourceProvider = new JsonRpcProvider(sourceRpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const signer = wallet.connect(sourceProvider);
 
@@ -64,7 +64,7 @@ task(
     const { contractAddress, blockchain } = taskArguments;
 
     const rpcProviderUrl = getProviderRpcUrl(blockchain);
-    const provider = new providers.JsonRpcProvider(rpcProviderUrl);
+    const provider = new JsonRpcProvider(rpcProviderUrl);
 
     const receiverContract: ProgrammableTokenTransfers = ProgrammableTokenTransfers__factory.connect(
       contractAddress,

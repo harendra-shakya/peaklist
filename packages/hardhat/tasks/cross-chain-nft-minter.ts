@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
 import { getPayFeesIn, getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
-import { Wallet, providers } from "ethers";
+import { Wallet, JsonRpcProvider } from "ethers";
 
 import { DestinationMinter, MyNFT, SourceMinter } from "../typechain-types/artifacts/contracts/cross-chain-nft-minter";
 
@@ -23,7 +23,7 @@ task(`deploy-destination-cross-chain-nft-minter`, `Deploys MyNFT.sol and Destina
     const privateKey = getPrivateKey();
     const rpcProviderUrl = getProviderRpcUrl(hre.network.name);
 
-    const provider = new providers.JsonRpcProvider(rpcProviderUrl);
+    const provider = new JsonRpcProvider(rpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const deployer = wallet.connect(provider);
 
@@ -76,7 +76,7 @@ task(`deploy-source-cross-chain-nft-minter`, `Deploys SourceMinter.sol smart con
     const privateKey = getPrivateKey();
     const rpcProviderUrl = getProviderRpcUrl(hre.network.name);
 
-    const provider = new providers.JsonRpcProvider(rpcProviderUrl);
+    const provider = new JsonRpcProvider(rpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const deployer = wallet.connect(provider);
 
@@ -114,7 +114,7 @@ task(`cross-chain-mint`, `Mints the new NFT by sending the Cross-Chain Message`)
     const privateKey = getPrivateKey();
     const sourceRpcProviderUrl = getProviderRpcUrl(sourceBlockchain);
 
-    const sourceProvider = new providers.JsonRpcProvider(sourceRpcProviderUrl);
+    const sourceProvider = new JsonRpcProvider(sourceRpcProviderUrl);
     const wallet = new Wallet(privateKey);
     const signer = wallet.connect(sourceProvider);
 
@@ -148,7 +148,7 @@ task("cross-chain-mint-balance-of", "Gets the balance of MyNFTs for provided add
   .addParam(`owner`, `The address to check the balance of MyNFTs`)
   .setAction(async (taskArguments: TaskArguments) => {
     const rpcProviderUrl = getProviderRpcUrl(taskArguments.blockchain);
-    const provider = new providers.JsonRpcProvider(rpcProviderUrl);
+    const provider = new JsonRpcProvider(rpcProviderUrl);
 
     const spinner: Spinner = new Spinner();
 
