@@ -7,20 +7,49 @@ import "hardhat/console.sol";
 
 // - Any creator can launch their campain to raise money for thier manga or book. 5% is given to the DAO.
 // - Implement chainlink CCIP for multichain transactions
+// this contract will inheret the BasicTokenSender.sol
+// [] First complete this contract
+// [] Then Implement CCIP
+
+/**
+ * @title CrowdFunding
+ * @author Harendra Shakya
+ * @notice It used Chainlink CCIP for multichain transactions.
+ * @dev Any creator can launch their campain to raise money for thier manga or book. 5% is given to the DAO.
+ */
 
 contract CrowdFunding {
 
+    // Errors
 	error CrowdFunding__StartDate_ShouldBeInPresent();
     error CrowdFunding__FundingWith_ZeroAmount();
     error CrowdFunding__InvalidCampaign();
     error CrowdFunding__CampaignAlreadyEnded();
+    error CrowdFunding__InvalidEndDate();
 
 	// State Variables
+    address payable private treasuryAddress;
     uint256 private s_campaignId;
-    mapping(uint256 => Campaign) private s_campaigns;
 
-	// Events: a way to emit log statements from smart contract that can be listened to by external parties
+    // s_campaignId => Campaign - Tracking Campaign with uint to save gas
+    mapping(uint256 campaignId => Campaign) private s_campaigns;
 
+    // creator => Campaign [] - Tracking All Campaign by creator to save gas and time
+    mapping(address creator => Campaign[] campaigns) private s_campaignCreatedByCreator;
+
+
+	// Events
+    event CampaignCreated(
+        uint256 indexed campaignId,
+        address indexed creator,
+        uint256 indexed targetAmount,
+        uint256 startAt,
+        uint256 endAt
+    );
+    event CamapignFunded(uint256 indexed campaignId, address indexed funder, uint256 indexed amount);
+    event WithdrawlSuccessful(uint256 indexed campaignId, address indexed owner, uint256 indexed amount);
+
+    // Type Declarations
     struct Campaign {
         address payable creator;
         uint256 id;
@@ -29,21 +58,28 @@ contract CrowdFunding {
         uint256 targetAmount;
         uint256 amountCollected;
         uint256 amountWithdrawnByOwner;
-		address[] funders;
+        uint256 startAt;
+        uint256 endAt;
+        string image;
+        address[] funders;
+        bool claimedByOwner;
     }
-
 
 	// Constructor: Called once on contract deployment
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
 
 	// Modifiers: used to define a set of rules that must be met before or after a function is executed
 
-	function createCampaign(
+    function createCampaign(
         string memory _name,
         string memory _description,
         uint256 _targetAmount,
+        uint256 _endAt,
         string memory _image
     ) external returns (uint256) {
+        if (_endAt < block.timestamp) {
+            revert CrowdFunding__InvalidEndDate();
+        }
 
         Campaign memory newCampaign = Campaign({
             creator: payable(msg.sender),
@@ -53,9 +89,22 @@ contract CrowdFunding {
             targetAmount: _targetAmount,
             amountCollected: 0,
             amountWithdrawnByOwner: 0,
-			funders: new address[](0)
+            startAt: block.timestamp,
+            endAt: _endAt,
+            image: _image,
+            funders: new address[](0),
+            claimedByOwner: false
         });
 
+        s_campaigns[s_campaignId] = newCampaign;
+
+        emit CampaignCreated(s_campaignId, msg.sender, _targetAmount, block.timestamp, _endAt);
+
+        s_campaignCreatedByCreator[msg.sender].push(newCampaign);
+
+        ++s_campaignId;
+
+        return s_campaignId;
     }
 
 	function fundCampaign(uint256 campaignId) external payable {
@@ -84,6 +133,10 @@ contract CrowdFunding {
 
       
         s_campaigns[campaignId].amountCollected = s_campaigns[campaignId].amountCollected + msg.value;
+    }
+
+    function getCurrentCampaignId() external view returns (uint256) {
+        return s_campaignId;
     }
 
 
