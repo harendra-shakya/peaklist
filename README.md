@@ -1,4 +1,17 @@
-[![Lint](https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml/badge.svg)](https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml)
+<div align="center">
+    <a href="https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml">
+        <img src="https://github.com/harendra-shakya/peaklist/actions/workflows/lint.yaml/badge.svg" alt="Build and Test">
+    </a>
+    <a href="https://peaklist-nextjs.vercel.app/">
+        <img src="https://therealsujitk-vercel-badge.vercel.app/?app=peaklist-nextjs" alt="Vercel">
+    </a>
+    <a href="https://github.com/harendra-shakya/peaklist/stargazers">
+        <img src="https://img.shields.io/github/stars/harendra-shakya/peaklist?label=Stars&logo=github" alt="Stargazers">
+    </a>
+    <a href="https://github.com/harendra-shakya/peaklist/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/harendra-shakya/peaklist?label=Licence&logo=gnu" alt="License">
+    </a>
+</div>
 
 - a clear short one-sentence description of your dapp. Aim for something simple like: “Easy social recovery via Telegram” or “Customizable long-term vaults on smart contract accounts to prevent thefts from hacking”.
 
