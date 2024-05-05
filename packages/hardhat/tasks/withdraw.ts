@@ -2,8 +2,7 @@ import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
-import { Withdraw } from "../typechain-types/artifacts/contracts/utils";
-import { Withdraw__factory } from "../typechain-types/factories/artifacts/contracts/utils";
+import { Withdraw, Withdraw__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 
 task(`withdraw`, `Withdraws tokens and coins from Withdraw.sol. Must be called by an Owner, otherwise it will revert`)

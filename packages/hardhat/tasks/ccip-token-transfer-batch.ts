@@ -7,8 +7,8 @@ import { TokenAmounts } from "./constants";
 import { Spinner } from "../utils/spinner";
 import { getCcipMessageId } from "./helpers";
 
-import { BasicTokenSender } from "../typechain-types/artifacts/contracts";
-import { BasicTokenSender__factory } from "../typechain-types/factories/artifacts/contracts";
+import { BasicTokenSender } from "../typechain-types";
+import { BasicTokenSender__factory } from "../typechain-types";
 
 task(
   `ccip-token-transfer-batch`,

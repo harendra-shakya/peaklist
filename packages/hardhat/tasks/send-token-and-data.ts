@@ -4,8 +4,8 @@ import { getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
 import { IRouterClient, IRouterClient__factory } from "../typechain-types";
 
-import { ProgrammableTokenTransfers } from "../typechain-types/artifacts/contracts";
-import { ProgrammableTokenTransfers__factory } from "../typechain-types/factories/artifacts/contracts";
+import { ProgrammableTokenTransfers } from "../typechain-types";
+import { ProgrammableTokenTransfers__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 
 task(`send-token-and-data`, `Sends token and data using ProgrammableTokenTransfers.sol`)

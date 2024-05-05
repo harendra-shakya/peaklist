@@ -3,8 +3,8 @@ import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
 
-import { ProgrammableTokenTransfers } from "../typechain-types/artifacts/contracts";
-import { ProgrammableTokenTransfers__factory } from "../typechain-types/factories/artifacts/contracts";
+import { ProgrammableTokenTransfers } from "../typechain-types";
+import { ProgrammableTokenTransfers__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 
 task(`deploy-programmable-token-transfers`, `Deploys the ProgrammableTokenTransfers smart contract`)

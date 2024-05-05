@@ -2,8 +2,8 @@ import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
 import { getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
-import { BasicMessageReceiver } from "../typechain-types/artifacts/contracts";
-import { BasicMessageReceiver__factory } from "../typechain-types/factories/artifacts/contracts";
+import { BasicMessageReceiver } from "../typechain-types";
+import { BasicMessageReceiver__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 
 task(`deploy-basic-message-receiver`, `Deploys the BasicMessageReceiver smart contract`)

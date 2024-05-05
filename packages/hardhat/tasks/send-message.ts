@@ -3,8 +3,8 @@ import { TaskArguments } from "hardhat/types";
 import { getPayFeesIn, getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
 
-import { BasicMessageSender } from "../typechain-types/artifacts/contracts";
-import { BasicMessageSender__factory } from "../typechain-types/factories/artifacts/contracts";
+import { BasicMessageSender } from "../typechain-types";
+import { BasicMessageSender__factory } from "../typechain-types";
 import { Spinner } from "../utils/spinner";
 
 task(`send-message`, `Sends basic text messages`)

@@ -4,8 +4,8 @@ import { getProviderRpcUrl } from "./utils";
 import { JsonRpcProvider } from "ethers";
 import { Spinner } from "../utils/spinner";
 
-import { BasicMessageReceiver } from "../typechain-types/artifacts/contracts";
-import { BasicMessageReceiver__factory } from "../typechain-types/factories/artifacts/contracts";
+import { BasicMessageReceiver } from "../typechain-types";
+import { BasicMessageReceiver__factory } from "../typechain-types";
 
 task(`get-message`, `Gets BasicMessageSender latest received message details`)
   .addParam(`receiverAddress`, `The BasicMessageReceiver address`)

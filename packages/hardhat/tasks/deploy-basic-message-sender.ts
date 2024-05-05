@@ -5,8 +5,8 @@ import { Wallet, JsonRpcProvider } from "ethers";
 import { Spinner } from "../utils/spinner";
 import { LINK_ADDRESSES } from "./constants";
 
-import { BasicMessageSender } from "../typechain-types/artifacts/contracts";
-import { BasicMessageSender__factory } from "../typechain-types/factories/artifacts/contracts";
+import { BasicMessageSender } from "../typechain-types";
+import { BasicMessageSender__factory } from "../typechain-types";
 
 task(`deploy-basic-message-sender`, `Deploys the BasicMessageSender smart contract`)
   .addOptionalParam(`router`, `The address of the Router contract`)

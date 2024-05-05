@@ -3,13 +3,14 @@ import { HardhatRuntimeEnvironment, TaskArguments } from "hardhat/types";
 import { getPayFeesIn, getPrivateKey, getProviderRpcUrl, getRouterConfig } from "./utils";
 import { Wallet, JsonRpcProvider } from "ethers";
 
-import { DestinationMinter, MyNFT, SourceMinter } from "../typechain-types/artifacts/contracts/cross-chain-nft-minter";
-
 import {
+  DestinationMinter,
+  MyNFT,
+  SourceMinter,
   DestinationMinter__factory,
   MyNFT__factory,
   SourceMinter__factory,
-} from "../typechain-types/factories/artifacts/contracts/cross-chain-nft-minter";
+} from "../typechain-types";
 
 import { Spinner } from "../utils/spinner";
 import { LINK_ADDRESSES } from "./constants";
