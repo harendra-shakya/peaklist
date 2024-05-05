@@ -4,6 +4,7 @@
   "scripts": {
     "generateTypes": "typechain --target ethers-v5 --out-dir typechain-types './abi/*.json'",
     "account": "hardhat run scripts/listAccount.ts",
+    "build": "yarn generateTypes && yarn compile",
     "chain": "hardhat node --network hardhat --no-deploy",
     "compile": "hardhat compile",
     "deploy": "hardhat deploy",
@@ -16,7 +17,7 @@
     "test": "REPORT_GAS=true hardhat test --network hardhat",
     "verify": "hardhat etherscan-verify",
     "hardhat-verify": "hardhat verify",
-     "clean": "rm -rf artifacts cache node_modules"
+    "clean": "rm -rf artifacts cache node_modules"
   },
   "devDependencies": {
     "@chainlink/contracts": "^0.6.1",

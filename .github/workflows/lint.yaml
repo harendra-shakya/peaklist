@@ -31,7 +31,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Compile contracts and generate typechain
-        run: yarn compile & yarn generateTypes
+        run: yarn build
 
       - name: Run hardhat node, deploy and test contracts
         run: yarn chain & yarn deploy & yarn test
