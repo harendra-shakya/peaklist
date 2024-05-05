@@ -10,6 +10,7 @@ import "hardhat/console.sol";
 // this contract will inheret the BasicTokenSender.sol
 // [] First complete this contract
 // [] Then Implement CCIP
+// TODO: Add functionality so users can decide if creator should withdraw or not and how much
 
 /**
  * @title CrowdFunding
@@ -20,18 +21,26 @@ import "hardhat/console.sol";
 
 contract CrowdFunding {
 
-    // Errors
+    //////////////////////////////////////////////////////////
+    ////////////////////  Custom Errors  /////////////////////
+    //////////////////////////////////////////////////////////
 	error CrowdFunding__StartDate_ShouldBeInPresent();
     error CrowdFunding__FundingWith_ZeroAmount();
     error CrowdFunding__InvalidCampaign();
     error CrowdFunding__CampaignAlreadyEnded();
     error CrowdFunding__InvalidEndDate();
+    error CrowdFunding__OnlyOwner_CanWithdraw();
+    error CrowdFunding__CampaignNotEnded();
+    error CrowdFunding__WithdrawFailed();
+    error CrowdFunding_MaxTimeIs_30days();
+    error CrowdFunding__BalanceIsZero();
+    error CrowdFunding__AmountAlready_WithdrawnByOwner();
 
     //////////////////////////////////////////////////////////
     /////////////.////  State Variables  /////////////////////
     //////////////////////////////////////////////////////////
 
-    address payable private treasuryAddress;
+    address payable private s_treasuryAddress;
     uint256 private s_campaignId;
 
     // s_campaignId => Campaign - Tracking Campaign with uint to save gas
@@ -55,7 +64,7 @@ contract CrowdFunding {
         uint256 endAt
     );
     event CamapignFunded(uint256 indexed campaignId, address indexed funder, uint256 indexed amount);
-    event WithdrawlSuccessful(uint256 indexed campaignId, address indexed owner, uint256 indexed amount);
+    event WithdrawSuccessful(uint256 indexed campaignId, address indexed owner, uint256 indexed amount);
 
     //////////////////////////////////////////////////////////
     ////////////////  Type Declarations  /////////////////////
@@ -85,6 +94,7 @@ contract CrowdFunding {
     //////////////////////  Functions  ///////////////////////
     //////////////////////////////////////////////////////////
 
+    // @dev no need to add end campaign function as we have _endAt
     function createCampaign(
         string memory _name,
         string memory _description,
@@ -160,6 +170,50 @@ contract CrowdFunding {
 
         emit CamapignFunded(campaignId, msg.sender, msg.value);
     }
+
+    function withdraw(uint256 campaignId) external {
+        address creator = s_campaigns[campaignId].creator;
+
+        // onlyOwner
+        if (creator != msg.sender) {
+            revert CrowdFunding__OnlyOwner_CanWithdraw();
+        }
+
+        uint256 currentTime = block.timestamp;
+        uint256 campaignEndTime = s_campaigns[campaignId].endAt;
+
+        // can only withdraw after end Time
+        if (currentTime < campaignEndTime) {
+            revert CrowdFunding__CampaignNotEnded();
+        }
+
+        // can't withdraw if already
+        if (s_campaigns[campaignId].claimedByOwner) {
+            revert CrowdFunding__AmountAlready_WithdrawnByOwner();
+        }
+
+        // can't withdraw if collected amount is 0
+        if (s_campaigns[campaignId].amountCollected == 0) {
+            revert CrowdFunding__BalanceIsZero();
+        }
+
+        s_campaigns[campaignId].claimedByOwner = true;
+
+        uint256 totalAmount = s_campaigns[campaignId].amountCollected;
+
+        s_campaigns[campaignId].amountWithdrawnByOwner = totalAmount;
+        s_campaigns[campaignId].amountCollected = 0;
+
+        emit WithdrawSuccessful(campaignId, msg.sender, totalAmount);
+
+        // TODO: Add DAO logic
+        (bool success,) = creator.call{value: totalAmount}("");
+        
+        if (!success) {
+            revert CrowdFunding__WithdrawFailed();
+        }
+    }
+
 
 
     //////////////////////////////////////////////////////////
