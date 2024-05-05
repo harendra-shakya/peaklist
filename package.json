@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "generateTypes": "yarn workspace @se-2/hardhat typechain --target ethers-v5 --out-dir typechain-types './abi/*.json'",
     "account": "yarn workspace @se-2/hardhat account",
     "chain": "yarn workspace @se-2/hardhat chain",
     "fork": "yarn workspace @se-2/hardhat fork",
