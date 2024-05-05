@@ -193,6 +193,10 @@ contract CrowdFunding {
         return funders;
     }
 
+    function getAmountFundedByUser(uint256 campaignId, address funder) external view returns (uint256) {
+        return s_fundedAmounts[campaignId][funder];
+    }
+
     function getCampaignsCreatedByUser() external view returns (Campaign[] memory) {
         return s_campaignCreatedByCreator[msg.sender];
     }
