@@ -104,4 +104,8 @@ describe("CrowdFunding", function () {
       expect(await crowdFunding.getCurrentCampaignId()).to.equal(campaignId);
     });
   });
+
+  describe("fundCampaign", function () {});
+
+  describe("withdraw", function () {});
 });
